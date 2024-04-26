@@ -38,23 +38,34 @@ class _Slide extends StatelessWidget {
           BoxShadow(
               color: Colors.black45, blurRadius: 10, offset: Offset(0, 10))
         ]);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
       child: DecoratedBox(
-          decoration: decoration,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                movie.backdropPath,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) {
-                    return const DecoratedBox(
-                        decoration: BoxDecoration(color: Colors.black12));
-                  }
-                  return FadeIn(child: child);
-                },
-              ))),
+        decoration: decoration,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: _buildImageWidget(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageWidget() {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.network(
+          movie.backdropPath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.network(
+              'https://th.bing.com/th/id/R.e7d69c9bb33ccdfbdb90350d1ebe8a75?rik=Ru1WFG%2fpCGjxng&pid=ImgRaw&r=0',
+              fit: BoxFit.cover,
+            );
+          },
+        ),
+      ],
     );
   }
 }

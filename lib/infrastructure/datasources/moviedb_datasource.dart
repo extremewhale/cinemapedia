@@ -30,7 +30,7 @@ class MoviedbDatasource extends MoviesDatasource {
   Future<List<Movie>> getNowplaying({int page = 1}) async {
     final response =
         await dio.get('/movie/now_playing', queryParameters: {'page': page});
-        
+
     return _jsonToMovies(response.data);
   }
 
@@ -58,12 +58,32 @@ class MoviedbDatasource extends MoviesDatasource {
   @override
   Future<Movie> getMovieById(String id) async {
     final response = await dio.get('/movie/$id');
-    if (response.statusCode != 200)
+    if (response.statusCode != 200) {
       throw Exception('Movie width id: $id no found');
+    }
+
     final movieDetails = MovieDetails.fromJson(response.data);
+
     final Movie movie = MovieMapper.movieDetailsToEntity(movieDetails);
+    // Obtener el ID de YouTube
+    final youtubeId = await getYoutubeId(id);
+
+    // Asignar el ID de YouTube a movie.trailerId solo si no es nulo
+    if (youtubeId != null) {
+      movie.trailerId = youtubeId;
+    }
 
     return movie;
+  }
+
+  Future<String?> getYoutubeId(String id) async {
+    try {
+      final response = await dio.get('/movie/$id/videos');
+      var youtubeId = response.data['results'][0]['key'];
+      return youtubeId;
+    } catch (error) {
+      return null;
+    }
   }
 
   @override

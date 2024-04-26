@@ -25,6 +25,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
   final scrollController = ScrollController();
   @override
   void initState() {
+    super.initState();
     scrollController.addListener(() {
       if (widget.loadNextPage == null) return;
       if ((scrollController.position.pixels + 200) >=
@@ -69,7 +70,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
 
 class _Slide extends StatelessWidget {
   final Movie movie;
-  const _Slide({super.key, required this.movie});
+  const _Slide({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -90,17 +91,17 @@ class _Slide extends StatelessWidget {
                 width: 150,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress != null) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Center(
-                        child: const CircularProgressIndicator(
+                        child:  CircularProgressIndicator(
                           strokeWidth: 2,
                         ),
                       ),
                     );
                   }
                   return GestureDetector(
-                    onTap: () => context.push('/movie/${movie.id}'),
+                    onTap: () => context.push('/home/0/movie/${movie.id}'),
                     child: FadeIn(child: child),
                   );
                 },
