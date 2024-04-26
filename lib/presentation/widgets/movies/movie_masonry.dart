@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/widgets/widgets.dart';
@@ -24,6 +24,7 @@ class _MovieMasonryState extends State<MovieMasonry> {
       if (widget.loadNextPage == null) return;
       if ((scrollController.position.pixels + 100) >=
           scrollController.position.maxScrollExtent) {
+        
         widget.loadNextPage!();
       }
     });

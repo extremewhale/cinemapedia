@@ -19,6 +19,7 @@ class Movie {
   final bool video;
   final double voteAverage;
   final int voteCount;
+  String? trailerId;
 
   Movie(
       {required this.adult,

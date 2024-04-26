@@ -11,8 +11,9 @@ class FavoritesView extends ConsumerStatefulWidget {
   FavoritesViewState createState() => FavoritesViewState();
 }
 
-class FavoritesViewState extends ConsumerState<FavoritesView> {
-  bool isLastPage = false;
+class FavoritesViewState extends ConsumerState<FavoritesView>
+    with AutomaticKeepAliveClientMixin {
+    bool isLastPage = false;
   bool isLoading = false;
   @override
   void initState() {
@@ -34,6 +35,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final favorireMovies = ref.watch(favoriteMoviesProvider).values.toList();
     if (favorireMovies.isEmpty) {
       final colors = Theme.of(context).colorScheme;
@@ -72,4 +74,8 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
       movies: favorireMovies,
     ));
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -5,6 +5,7 @@ import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.da
 import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
   static const name = 'movie-screen';
@@ -111,8 +112,48 @@ class _MovieDetails extends StatelessWidget {
         ),
         // TODO : Mostrar actores ListView
         _ActorsByMovie(movieId: movie.id.toString()),
+        SizedBox(height: 20),
+
+        movie.trailerId != null
+            ? _trailerMovie(
+                idtrailer: movie.trailerId.toString(),
+              )
+            : Container(),
         SizedBox(height: 50),
       ],
+    );
+  }
+}
+
+class _trailerMovie extends StatefulWidget {
+  final String idtrailer;
+  const _trailerMovie({super.key, required this.idtrailer});
+
+  @override
+  State<_trailerMovie> createState() => _trailerMovieState();
+}
+
+class _trailerMovieState extends State<_trailerMovie> {
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    final youtubeUrl = 'https://www.youtube.com/embed/${widget.idtrailer}';
+    final videoID = YoutubePlayer.convertUrlToId(youtubeUrl);
+    print('${widget.idtrailer}');
+
+    _controller = YoutubePlayerController(
+        initialVideoId: videoID!,
+        flags: const YoutubePlayerFlags(autoPlay: false));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
     );
   }
 }
@@ -244,19 +285,19 @@ class _CustomSliverAppBar extends ConsumerWidget {
             ),
             const _CustomGradient(
                 begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.7, 1.0],
+                colors: [Colors.transparent, Colors.black87]),
+            const _CustomGradient(
+                begin: Alignment.topCenter,
                 end: Alignment.bottomLeft,
-                stops: [0.0, 0.2],
+                stops: [0.0, 0.6],
                 colors: [Colors.black54, Colors.transparent]),
             const _CustomGradient(
                 begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.8, 1.0],
-                colors: [Colors.transparent, Colors.black54]),
-            const _CustomGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.0, 0.3],
-                colors: [Colors.transparent, Colors.black87]),
+                end: Alignment.bottomRight,
+                stops: [0.0, 0.0],
+                colors: [Colors.black54, Colors.transparent]),
           ],
         ),
       ),
